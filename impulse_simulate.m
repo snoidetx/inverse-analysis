@@ -53,7 +53,7 @@ thermalBC(thermalModelT, 'Edge', 2, 'Temperature', 0);
 close;
 
 % Compute the transient solution for solution times from t = 0 to t = 30 * 24 * 60 * 60 seconds.
-num_of_days = 30;
+num_of_days =31; % extend a little bit to avoid starting from 0
 final_time = num_of_days * 24 * 60 * 60;
 dt = 3 * 60 * 60;
 tlist = 0:dt:final_time;
@@ -61,7 +61,7 @@ dlist = tlist / (24 * 60 * 60);
 fprintf("%s", int2str(size(tlist)))
 
 % Calculate temperature at TC1 and TC2.
-i_time = 1;
+i_time = 3;
 noise_level = 0.0;
 
 The_impulse_heatflux_setting = @(dummy, state)impulse_heat_flux_setting(dummy, state, i_time);
@@ -87,7 +87,10 @@ set(gca, 'Layer', 'top')
 % Plot the temperature at the left end of the rod as a function of time. The outer surface of the rod is exposed to the environment with a constant temperature of 100 °C. When the surface temperature of the rod is less than 100 °C, the environment heats the rod. The outer surface is slightly warmer than the inner axis. When the surface temperature is greater than 100 °C, the environment cools the rod. The outer surface becomes cooler than the interior of the rod.
 subplot(2,2,3)
 
-plot(dlist, fluxlist / 100000);
+plot(dlist, fluxlist / 100000, 'LineWidth', 1);
+hold on;
+fill([dlist, fliplr(dlist)], [fluxlist/100000, zeros(size(fluxlist/100000))], 'blue', 'FaceAlpha', 0.8);
+hold off;
 xlim([-2 30]);
 [t, s] = title('Input Heat Flux', newline, 'FontSize', 13)
 set(s, 'FontSize', 1);
@@ -108,9 +111,9 @@ subplot(2,2,4)
 %Tsensor1 = Tsensor1 + randn(size(Tsensor1)) .* std1;
 %Tsensor2 = Tsensor2 + randn(size(Tsensor2)) .* std2;
 
-plot(dlist, Tsensor1, 'Color', 'blue');
+plot(dlist, Tsensor1, 'Color', 'blue', 'LineWidth', 1);
 hold on;
-plot(dlist, Tsensor2, 'Color', 'red');
+plot(dlist, Tsensor2, 'Color', 'red', 'LineWidth', 1);
 [t, s] = title('Output Measured Temperature', newline, 'FontSize', 13)
 set(s, 'FontSize', 1);
 xlabel 'Time (d)'
@@ -124,6 +127,10 @@ legend('TC1', 'TC2', 'Location', 'NorthEast', 'FontSize', 12)
 hold off;
 
 fprintf("%s", int2str(size(Tsensor1)))
+
+tlist = 0:dt:30*24*60*60;
+Tsensor1 = Tsensor1(i_time:i_time+240);
+Tsensor2 = Tsensor2(i_time:i_time+240);
 
 save("impulse_data.mat", "tlist", "Tsensor1", "Tsensor2");
 

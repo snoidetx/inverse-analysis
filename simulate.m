@@ -1,4 +1,4 @@
-function simulate()
+function [dlist, fluxlist] = simulate()
 
 % Transient solution
 % Reference: https://jp.mathworks.com/help/pde/ug/heat-distribution-in-a-circular-cylindrical-rod.html
@@ -86,7 +86,7 @@ set(gca, 'Layer', 'top')
 % Plot the temperature at the left end of the rod as a function of time. The outer surface of the rod is exposed to the environment with a constant temperature of 100 °C. When the surface temperature of the rod is less than 100 °C, the environment heats the rod. The outer surface is slightly warmer than the inner axis. When the surface temperature is greater than 100 °C, the environment cools the rod. The outer surface becomes cooler than the interior of the rod.
 subplot(2,2,2)
 
-plot(dlist, fluxlist / 100000);
+plot(dlist, fluxlist, 'LineWidth', 1);
 [t, s] = title('Input Heat Flux', newline, 'FontSize', 13)
 set(s, 'FontSize', 1);
 ylabel("Heat flux (W/m^2)")
@@ -94,24 +94,24 @@ xlabel("Time (d)")
 ax = gca;
 ax.XAxis.FontSize = 12;
 ax.YAxis.FontSize = 12;
-annotation('textbox', [0.58, 0.72, 0.2, 0.2], 'String', '\times10^5', 'FitBoxToText', 'on', 'FontSize', 12, 'EdgeColor', 'none');
+%annotation('textbox', [0.58, 0.72, 0.2, 0.2], 'String', '\times10^5', 'FitBoxToText', 'on', 'FontSize', 12, 'EdgeColor', 'none');
 
 subplot(2,2,4)
 
 % Add artificial noise.
-%std_rate = 0.01941;
-std_rate = 0;
+std_rate = 0.01941;
+%std_rate = 0;
 std1 = Tsensor1 * std_rate;
 std2 = Tsensor2 * std_rate;
 rng(42, 'twister');
 Tsensor1 = Tsensor1 + randn(size(Tsensor1)) .* std1;
 Tsensor2 = Tsensor2 + randn(size(Tsensor2)) .* std2;
 
-plot(dlist, Tsensor1, 'Color', 'blue');
+plot(dlist, Tsensor1, 'Color', 'blue', 'LineWidth', 1);
 hold on;
-plot(dlist, Tsensor2, 'Color', 'red');
-%[t, s] = title('Output Measured Temperature', newline, 'FontSize', 13)
-%set(s, 'FontSize', 1);
+plot(dlist, Tsensor2, 'Color', 'red', 'LineWidth', 1);
+[t, s] = title('Output Measured Temperature', newline, 'FontSize', 13)
+set(s, 'FontSize', 1);
 xlabel 'Time (d)'
 ylabel 'Temperature (^\circC)'
 ax = gca;

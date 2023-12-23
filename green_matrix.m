@@ -4,7 +4,7 @@ load("impulse_data.mat");
 
 m = size(tlist);
 m = m(2) - 1;
-fprintf("%s", int2str(m))
+%fprintf("%s", int2str(m))
 G1 = zeros(m, m);
 G2 = zeros(m, m);
 dt = 1 / m;

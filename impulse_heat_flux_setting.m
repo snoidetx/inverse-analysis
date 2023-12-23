@@ -8,6 +8,6 @@ tlist = 0:dt:final_time;
 
 norm_time = (state.time) / final_time; %normalized time
 impulse_time = tlist(itime) / final_time;
-heat_flux_val = normpdf(norm_time, impulse_time, dt/final_time/2);
+heat_flux_val = normpdf(norm_time, impulse_time, dt/final_time);
 
 end
